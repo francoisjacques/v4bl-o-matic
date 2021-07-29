@@ -17,14 +17,14 @@
 
 # TODO:
 # - receive arguments from command line as options
-# - integrate other commercial software described in v4bl instructions
-# - integrate special folders described by v4bl instructions for games, documents, etc.
+# - integrate other commercial software described in vbl instructions
+# - integrate special folders described by vbl instructions for games, documents, etc.
 # - sha256 checks of files downloaded with aria2 and commercial files
 
 # Uncomment for debugging
 #set -x
 
-VERSION="2.6.1alpha"
+VERSION="2.7.0alpha"
 
 function preflight_check() {
     echo >&2 -e "\nChecking required utilities..."
@@ -32,13 +32,13 @@ function preflight_check() {
 
     for cmd in "${dependencies[@]}"
     do
-      if ! command -v "${cmd}" &> /dev/null
-      then
-          echo >&2 "Pre-flight ABORTED: ${cmd} could not be found."
-          exit 1
-      fi
-      echo >&2 "Pre-flight check, executable: ${cmd} - nominal."
-      # do something on $var
+        if ! command -v "${cmd}" &> /dev/null
+        then
+            echo >&2 "Pre-flight ABORTED: ${cmd} could not be found."
+            exit 1
+        fi
+        echo >&2 "Pre-flight check, executable: ${cmd} - nominal."
+        # do something on $var
     done
 
     # parallel has a nagging banner. This is not academic research work.
@@ -53,11 +53,11 @@ function preflight_python() {
     python3 -m venv venv
     USER_PYTHON_BIN_DIR=$(readlink -f venv/bin)
     source "${USER_PYTHON_BIN_DIR}/activate"
-    pip install --user -r ./requirements.txt || \
+    pip install -r ./requirements.txt || \
         { echo >&2 'Pre-flight ABORTED: gdown could not be installed.'; deactivate; exit 1; }
-    deactivate
-    echo >&2 "Pre-flight check, executable: gdown - nomimal."
-}
+        deactivate
+        echo >&2 "Pre-flight check, executable: gdown - nomimal."
+    }
 
 function query_card_size() {
     read -r -p "Enter your work/CF card size: 32, 64, (128) or 256 [Enter for default 128]:" CF_CARD_SIZE
@@ -65,8 +65,8 @@ function query_card_size() {
 }
 
 function query_work_dir() {
-    NEW_WORK=$(mktemp -d -t -u v4bl_work.XXXX)
-    echo >&2 "IMPORTANT: for proper sandboxing and predictability, v4bl_o_matic **clears** the work directory between runs."
+    NEW_WORK=$(mktemp -d -t -u vbl_work.XXXX)
+    echo >&2 "IMPORTANT: for proper sandboxing and predictability, vbl_o_matic **clears** the work directory between runs."
     echo >&2 "It is highly recommended you stick with the defaults, which creates a new temporary directory."
     read -r -p "Specify work directory [Enter for default, from mktemp: ${NEW_WORK}]:" WORK
     WORK=${WORK:-${NEW_WORK}}
@@ -87,11 +87,11 @@ function query_commercial_dir() {
 function query_downloads_dir() {
     if ! command -v "xdg-user-dir" &> /dev/null
     then
-        DEFAULT_DOWNLOADS="${HOME}/Downloads/v4bl"
+        DEFAULT_DOWNLOADS="${HOME}/Downloads/vbl"
     else
-        DEFAULT_DOWNLOADS="$(xdg-user-dir DOWNLOAD)/v4bl"
+        DEFAULT_DOWNLOADS="$(xdg-user-dir DOWNLOAD)/vbl"
     fi
-    read -r -p "Specify directory where to download v4bl_o_matic files [Enter for default: ${DEFAULT_DOWNLOADS}]:" DOWNLOADS
+    read -r -p "Specify directory where to download vbl_o_matic files [Enter for default: ${DEFAULT_DOWNLOADS}]:" DOWNLOADS
     DOWNLOADS=${DOWNLOADS:-${DEFAULT_DOWNLOADS}}
 }
 
@@ -114,31 +114,31 @@ function download_dependencies() {
     http://amigan.1emu.net/releases/BoingBags3&4.lha
 EOF
 
-    aria2c \
-        -i "${WORK}/download.manifest" \
-        --console-log-level=error \
-        --remote-time \
-        --max-connection-per-server=5 \
-        --continue \
-        --check-integrity \
-        --dir="${DOWNLOADS}" \
-        --seed-time=0 \
-        --summary-interval=0 &
+aria2c \
+    -i "${WORK}/download.manifest" \
+    --console-log-level=error \
+    --remote-time \
+    --max-connection-per-server=5 \
+    --continue \
+    --check-integrity \
+    --dir="${DOWNLOADS}" \
+    --seed-time=0 \
+    --summary-interval=0 &
 
-    aria2c_pid=$!
+aria2c_pid=$!
 
     # Sets parallel_pid
-    download_v4bl_google
+    download_vbl_google
 
     wait ${aria2c_pid} ${parallel_pid}
 }
 
-# TODO: append v4bl link upon 128 selection. Adjust for other sizes
-function download_v4bl_google() {
+# TODO: append vbl link upon 128 selection. Adjust for other sizes
+function download_vbl_google() {
     find "sha256" \
         -maxdepth 1 \
         -type f \
-        -iname "V4BL*sha256" \
+        -iname "vbl*sha256" \
         | xargs cp --verbose --update --target-directory="${DOWNLOADS}"
 
     source "${USER_PYTHON_BIN_DIR}/activate"
@@ -146,17 +146,18 @@ function download_v4bl_google() {
     cd "${DOWNLOADS}"
 
     gdrive_ids=(\
-        1tdzYRWy07NZL1o8t3O25tE7TPjkdCbSN \
-        1itPogEvfndft9ASB7lNdMbNtbigkAdUD \
-        1vRz-wVCwep5VFp1UkEerTAvdFM4jFBvj \
-        10psTBzzct5IpNiurAcfs_t9pYl9pjAjD \
+        1ufb_IHIGPUpDSC0Pf6qZlIi4DmWmEy1_ \
+        1rhjXPtM3d1L-jPU48ae0RDZlIaNSYrwq \
+        1IpvvzkSN30-tfWOfc3nTEd_nt0c3NymZ \
+        1maEkU3FclrFg6JC_tk473bqBAKkg66mh \
+        1XpDeDXJ-SXRBh1rEYSgyr719lfY7XNM8
     )
 
     real_name=(\
-        V4BL-SD-Card-1-Install.zip \
-        V4BL-SD-Card-2-ApollOS.img.zip \
-        V4BL-SD-Card-4-EmuTOS.img.zip \
-        V4BL-128G-CF-Card.img.zip \
+        VBL-SD-Card-1-Install.zip \
+        VBL-SD-Card-2-ApollOS.img.zip \
+        VBL-SD-Card-4-EmuTOS.img.zip \
+        VBL-128G-CF-Card.img.zip \
     )
 
     mkdir -p "${HOME}/.parallel"
@@ -166,9 +167,9 @@ function download_v4bl_google() {
         --link \
         --verbose \
         "sha256sum --check \"{2}.sha256\" || \
-            (python \"${GDOWN_DIR}/gdown\" \"https://drive.google.com/uc?id={1}\" && sha256sum --check \"{2}.sha256\")" \
-            ::: "${gdrive_ids[@]}" \
-            ::: "${real_name[@]}" &
+        (python \"${GDOWN_DIR}/gdown\" \"https://drive.google.com/uc?id={1}\" && sha256sum --check \"{2}.sha256\")" \
+        ::: "${gdrive_ids[@]}" \
+        ::: "${real_name[@]}" &
 
     parallel_pid=$!
 
@@ -182,11 +183,11 @@ function extract_archives() {
 
     archives=(\
         "${COMMERCIAL}/AmigaForever8Plus.zip" \
-        "${DOWNLOADS}/V4BL-${CF_CARD_SIZE}G-CF-Card.img.zip" \
-        "${DOWNLOADS}/V4BL-SD-Card-1-Install.zip" \
-        "${DOWNLOADS}/V4BL-SD-Card-2-ApollOS.img.zip" \
+        "${DOWNLOADS}/VBL-${CF_CARD_SIZE}G-CF-Card.img.zip" \
+        "${DOWNLOADS}/VBL-SD-Card-1-Install.zip" \
+        "${DOWNLOADS}/VBL-SD-Card-2-ApollOS.img.zip" \
         "${DOWNLOADS}/coffin_r58_32GB.7z" \
-        "${DOWNLOADS}/V4BL-SD-Card-4-EmuTOS.img.zip" \
+        "${DOWNLOADS}/VBL-SD-Card-4-EmuTOS.img.zip" \
     )
 
     directories=(\
@@ -203,11 +204,11 @@ function extract_archives() {
         --link \
         --verbose \
         "mkdir -p \"${WORK}/{2}\" && 7z x {1} -aos -o\"${WORK}/{2}\"" \
-            ::: "${archives[@]}" \
-            ::: "${directories[@]}"
-}
+        ::: "${archives[@]}" \
+        ::: "${directories[@]}"
+    }
 
-echo -e "V4BL-O-Matic ${VERSION}"
+echo -e "vbl-O-Matic ${VERSION}"
 
 # Guards
 
@@ -224,7 +225,7 @@ query_commercial_dir
 query_downloads_dir
 
 # Wheeeeeeeeeeeee....
-#prepare_workspace
+prepare_workspace
 
 # Download in background, using all cores and bandwidth it can take.
 download_dependencies
@@ -300,7 +301,7 @@ else
     echo >&2 -e 'Optional: Roadshow is missing. Skipped.'
 fi
 
-WORK=/home/francois/v4bl_work
+WORK=/home/francois/vbl_work
 find -H "${WORK}/SD1" \
     -maxdepth 1 \
     -type d \
