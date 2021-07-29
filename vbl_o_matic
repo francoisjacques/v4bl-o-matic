@@ -160,7 +160,7 @@ function download_vbl_google() {
 
     real_name=(\
         VBL-SD-Card-1-Install.zip \
-        VBL-SD-Card-2-ApollOS.img.zip \
+        VBL-SD-Card-2-ApolloOS.img.zip \
         VBL-SD-Card-4-EmuTOS.img.zip \
         VBL-128G-CF-Card.img.zip \
         VBL-Update-R6.1.zip \
@@ -192,7 +192,7 @@ function extract_archives() {
         "${COMMERCIAL}/AmigaForever8Plus.zip" \
         "${DOWNLOADS}/VBL-${CF_CARD_SIZE}G-CF-Card.img.zip" \
         "${DOWNLOADS}/VBL-SD-Card-1-Install.zip" \
-        "${DOWNLOADS}/VBL-SD-Card-2-ApollOS.img.zip" \
+        "${DOWNLOADS}/VBL-SD-Card-2-ApolloOS.img.zip" \
         "${DOWNLOADS}/coffin_r58_32GB.7z" \
         "${DOWNLOADS}/VBL-SD-Card-4-EmuTOS.img.zip" \
     )
