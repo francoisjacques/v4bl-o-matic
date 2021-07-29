@@ -26,6 +26,9 @@
 
 VERSION="2.7.0alpha"
 
+# https://stackoverflow.com/a/246128
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 function preflight_check() {
     echo >&2 -e "\nChecking required utilities..."
     dependencies=(aria2c 7z fs-uae parallel)
@@ -170,7 +173,7 @@ function download_vbl_google() {
         --will-cite \
         --link \
         --verbose \
-        "sha256sum --check \"{2}.sha256\" || \
+        "sha256sum --check \"${SCRIPT_DIR}/sha256/{2}.sha256\" || \
         (python \"${GDOWN_DIR}/gdown\" \"https://drive.google.com/uc?id={1}\" && sha256sum --check \"{2}.sha256\")" \
         ::: "${gdrive_ids[@]}" \
         ::: "${real_name[@]}" &
