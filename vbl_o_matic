@@ -150,7 +150,9 @@ function download_vbl_google() {
         1rhjXPtM3d1L-jPU48ae0RDZlIaNSYrwq \
         1IpvvzkSN30-tfWOfc3nTEd_nt0c3NymZ \
         1maEkU3FclrFg6JC_tk473bqBAKkg66mh \
-        1XpDeDXJ-SXRBh1rEYSgyr719lfY7XNM8
+        1XpDeDXJ-SXRBh1rEYSgyr719lfY7XNM8 \
+        1H2BJHCjAKzcNMRa5A-_UmN6ZCLzIkbBS \
+        1MRSLiRD4HcdpLl5AzWOWHoKPFrq8Vkss
     )
 
     real_name=(\
@@ -158,6 +160,8 @@ function download_vbl_google() {
         VBL-SD-Card-2-ApollOS.img.zip \
         VBL-SD-Card-4-EmuTOS.img.zip \
         VBL-128G-CF-Card.img.zip \
+        VBL-Update-R6.1.zip \
+        R6.2.zip
     )
 
     mkdir -p "${HOME}/.parallel"
