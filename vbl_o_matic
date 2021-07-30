@@ -308,7 +308,6 @@ else
     echo >&2 -e 'Optional: Roadshow is missing. Skipped.'
 fi
 
-WORK=/home/francois/vbl_work
 find -H "${WORK}/SD1" \
     -maxdepth 1 \
     -type d \
